@@ -1,0 +1,8 @@
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+find_dependency(ogccdb-core 0.4 CONFIG)
+find_dependency(Threads)
+
+include("${CMAKE_CURRENT_LIST_DIR}/ogccdb-runtimepublisher-targets.cmake")
+check_required_components(ogccdb-runtimepublisher)

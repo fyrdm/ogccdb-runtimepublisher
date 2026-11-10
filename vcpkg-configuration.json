@@ -1,0 +1,14 @@
+{
+  "default-registry": {
+    "kind": "builtin",
+    "baseline": "9eec002df1cd109f8f104cd966a763daf9751489"
+  },
+  "registries": [
+    {
+      "kind": "git",
+      "repository": "https://github.com/fyrdm/ogccdb-registry.git",
+      "baseline": "e2718e0d5dd1397b149bd58645a377106e3eea09",
+      "packages": ["ogccdb-core"]
+    }
+  ]
+}
