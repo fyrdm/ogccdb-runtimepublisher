@@ -106,6 +106,7 @@ TerrainMesh build_terrain_mesh(const cdb13::TileAddress& tile, const cdb13::Elev
         }
     }
 
+    if (!options.skirts) return m;
     // Skirt: the edge ring walked clockwise, each vertex copied and lowered.
     const double ns_metres = (e.north - e.south) * kDegToRad * kMeanEarthRadius;
     const double depth = ns_metres * options.skirt_fraction + options.skirt_min;

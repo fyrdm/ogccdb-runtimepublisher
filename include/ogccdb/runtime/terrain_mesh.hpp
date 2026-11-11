@@ -39,6 +39,7 @@ struct Image {
 
 struct MeshOptions {
     int resolution = 32;  ///< grid cells per tile side (vertices: resolution + 1)
+    bool skirts = true;   ///< false: the bare surface only (shows cracks between LODs)
     /// Skirt depth below the tile edge, as a fraction of the tile's north-south size, plus `skirt_min` metres.
     double skirt_fraction = 0.01;
     double skirt_min = 5.0;
