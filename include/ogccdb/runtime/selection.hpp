@@ -53,6 +53,10 @@ struct TileRequest {
 struct Selection {
     std::vector<TileAddress> draw;       ///< ready tiles that together cover the view, no overlaps
     std::vector<TileRequest> requests;   ///< tiles to load, not ready yet
+    /// Ready tiles the walk went through on the way to `draw` (refined
+    /// ancestors). They must stay loaded: dropping one makes its whole
+    /// subtree fall back to a coarser tile until it is loaded again.
+    std::vector<TileAddress> refined;
     int culled = 0;                      ///< tiles skipped as outside the view or behind the horizon
 };
 
