@@ -114,6 +114,7 @@ struct Walker {
             // Refine once every visible child can be drawn; a tile with no
             // data of its own has nothing to show meanwhile, so it refines anyway.
             if (pending.empty() || !drawable) {
+                if (own) out.refined.push_back(t);
                 for (const TileAddress& c : shown) visit(c, heights);
                 return;
             }

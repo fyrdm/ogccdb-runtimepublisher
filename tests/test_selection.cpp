@@ -80,6 +80,18 @@ TEST(Selection, FarIsCoarseNearIsFine) {
     EXPECT_EQ(finest(select_tiles(idx, looking_down(47.5, 8.5, 1000), all_ready(), extra)), 5);
 }
 
+TEST(Selection, ReportsRefinedAncestors) {
+    const TileIndex idx = full_index(2);
+    const Selection s = select_tiles(idx, looking_down(47.5, 8.5, 3000), all_ready(), no_extra());
+    // The chain LOD -10..1 above the drawn LOD 2 tiles: 11 tiles + 4 at LOD 1.
+    ASSERT_FALSE(s.refined.empty());
+    for (const TileAddress& t : s.draw) {
+        for (std::optional<TileAddress> a = cdb13::parent_tile(t); a; a = cdb13::parent_tile(*a)) {
+            EXPECT_NE(std::find(s.refined.begin(), s.refined.end(), *a), s.refined.end());
+        }
+    }
+}
+
 TEST(Selection, DrawnTilesDoNotOverlap) {
     const TileIndex idx = full_index(3);
     const Selection s = select_tiles(idx, looking_down(47.2, 8.2, 20000), all_ready());

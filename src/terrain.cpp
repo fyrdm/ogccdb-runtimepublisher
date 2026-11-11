@@ -312,6 +312,7 @@ const std::vector<DrawTile>& Terrain::update(const Camera& camera) {
     d.draw.clear();
     TerrainStats& s = d.last_stats;
     s.drawn_per_lod.assign(cdb13::kMaxLod - cdb13::kMinLod + 1, 0);
+    for (const TileAddress& t : sel.refined) d.resident.at(t).last_used = frame;
     for (const TileAddress& t : sel.draw) {
         Resident& r = d.resident.at(t);
         r.last_used = frame;

@@ -81,6 +81,31 @@ TEST(Terrain, StreamsDownToTheFinestLod) {
     fs::remove_all(root);
 }
 
+TEST(Terrain, TightBudgetKeepsTheTilesInUse) {
+    const fs::path root = make_store();
+    {
+        TerrainOptions o;
+        o.mesh.resolution = 8;
+        o.worker_threads = 2;
+        o.selection.extra_lods = 0;
+        o.tile_budget_bytes = 1;  // every tile not in use is dropped at once
+        Terrain terrain(root, o);
+        const Camera cam = above(2000);
+        for (int i = 0; i < 40; ++i) {
+            terrain.update(cam);
+            terrain.wait_idle();
+        }
+        // Once converged, the view stays at the finest LOD frame after frame.
+        for (int i = 0; i < 10; ++i) {
+            const auto& draw = terrain.update(cam);
+            ASSERT_EQ(draw.size(), 1u);
+            EXPECT_EQ(draw[0].tile.lod, -5);
+        }
+        EXPECT_EQ(terrain.stats().queued, 0u);
+    }
+    fs::remove_all(root);
+}
+
 TEST(Terrain, RejectsAFolderThatIsNotACdb) {
     EXPECT_THROW(Terrain(fs::temp_directory_path() / "ogccdb_runtime_missing"), std::runtime_error);
 }
