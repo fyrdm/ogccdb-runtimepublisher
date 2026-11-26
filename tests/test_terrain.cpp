@@ -18,7 +18,9 @@ const Geocell kCell{47, 8};
 // A small store: Elevation and Imagery from LOD -10 to -5 (at most 32 x 32).
 fs::path make_store() {
     std::mt19937 rng(42);
-    const fs::path root = fs::temp_directory_path() / ("ogccdb_runtime_test_" + std::to_string(rng()));
+    // One folder per test: ctest -j runs the tests side by side.
+    const auto* test = ::testing::UnitTest::GetInstance()->current_test_info();
+    const fs::path root = fs::temp_directory_path() / (std::string("ogccdb_runtime_test_") + test->name());
     fs::remove_all(root);
     cdb13::Store store = cdb13::Store::create(root);
     for (int lod = cdb13::kMinLod; lod <= -5; ++lod) {
